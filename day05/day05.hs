@@ -1,4 +1,3 @@
-import Debug.Trace
 import Data.Char
 
 createList :: Int -> [[Char]]
@@ -6,8 +5,9 @@ createList 0 = []
 createList size = [] : createList (size - 1)
 
 insertInStackList :: [[Char]] -> [Char] -> Int -> [[Char]]
-insertInStackList (x:xs) elem 0 = elem : xs
-insertInStackList (x:xs) elem idx = x : insertInStackList xs elem (idx - 1)
+insertInStackList [] _ _ = []
+insertInStackList (_:xs) el 0 = el : xs
+insertInStackList (x:xs) el idx = x : insertInStackList xs el (idx - 1)
 
 populateWithLine :: String -> [[Char]] -> Int -> Int -> [[Char]]
 populateWithLine [] l _ _ = l
@@ -20,6 +20,7 @@ populateWithLine line l acc listIdx =
         newL = insertInStackList l ((l !! listIdx) ++ [line !! 1]) listIdx
 
 populateStack :: [String] -> [[Char]] -> [[Char]]
+populateStack [] _ = []
 populateStack (x:xs) l
     | x == "" = l
     | otherwise = populateStack xs newStacks
@@ -43,7 +44,7 @@ processInstructions (x:xs)
     | otherwise = processInstructions xs
 
 createInstructionList :: [String] -> Bool -> [[Int]]
-createInstructionList [] b = []
+createInstructionList [] _ = []
 createInstructionList (x:xs) b
     | x == "" = createInstructionList xs True
     | otherwise = if b then instruction : createInstructionList xs True else createInstructionList xs False
